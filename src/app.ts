@@ -3,6 +3,7 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 import createHttpError from "http-errors";
 import userRouter from "./user/userRouter";
 const app = express();
+app.use(express.json()); // for json parsing
 
 app.get("/", (req, res, next) => {
   const error = createHttpError(400, "Something went wrong");
