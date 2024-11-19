@@ -46,10 +46,8 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     //Response
-    res.json({ accessToken: token });
+    res.status(201).json({ accessToken: token });
   } catch (error) {
     return next(createHttpError(500, "Error while signing the jwt token"));
   }
 };
-
-export { createUser };
