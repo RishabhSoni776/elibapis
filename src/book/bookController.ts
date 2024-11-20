@@ -2,10 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import cloudinary from "../config/cloudinary";
 import path from "node:path";
-import { buffer } from "node:stream/consumers";
-
+// import { buffer } from "node:stream/consumers";
+import bookModel from "./bookModel";
+import fs from "node:fs";
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
   console.log("files", req.files);
+  const { title, description } = req.body;
+  console.log("title", title, "description", description);
+  if (!title || !description) {
+    console.log("title", title, "description", description);
+    throw createHttpError(
+      400,
+      "All fields (title, author, description) are required."
+    );
+  }
 
   try {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -49,7 +59,28 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
     console.log("bookUploadResult", bookUploadResult);
 
-    res.json({});
+    const newBook = await bookModel.create({
+      title,
+      author: "673c7098b5d07b28ea3bc954",
+      description,
+      coverImage: uploadResult.secure_url,
+      file: bookUploadResult.secure_url,
+    });
+
+    // Delete Temporary files
+    try {
+      await fs.promises.access(filePath);
+      await fs.promises.unlink(filePath);
+
+      await fs.promises.access(bookFilePath);
+      await fs.promises.unlink(bookFilePath);
+      console.log("filepath", filePath, "bookfilepath", bookFilePath);
+    } catch (error) {
+      console.error("Error during file deletion:", error);
+      return next(createHttpError(500, `Error while deleting files:`));
+    }
+
+    res.status(201).json({ id: newBook._id });
   } catch (error) {
     console.log("error", error);
     return next(createHttpError(500, "Error while uploading book"));
