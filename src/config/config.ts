@@ -5,6 +5,9 @@ const _config = {
   databaseurl: process.env.MONGOCONNECTIONSTRING,
   env: process.env.NODE_ENV,
   jwtSecret: process.env.JWT_SECRET,
+  cloudinary_Cloud: process.env.CLOUDINARY_CLOUD,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+  cloudinarySecret: process.env.CLOUDINARY_API_SECRET,
 };
 
 export const config = Object.freeze(_config);

@@ -5,10 +5,13 @@ import path from "node:path";
 
 const bookRouter = express.Router();
 
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 const upload = multer({
   dest: path.resolve(__dirname, "../../public/data/uploads"),
   limits: {
-    fileSize: 3e7, // 3e7 is arround 30mb not exact
+    fieldSize: 1e7, // 1e7 is arround 10mb not exact
+    // fileSize: 3e7, // 3e7 is arround 30mb not exact
   },
 });
 //Routes
