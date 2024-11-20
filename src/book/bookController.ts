@@ -58,7 +58,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     console.log("bookUploadResult", bookUploadResult);
-
+    //@ts-ignore
+    console.log("userId", req.userId);
     const newBook = await bookModel.create({
       title,
       author: "673c7098b5d07b28ea3bc954",
